@@ -23,7 +23,7 @@ def read_img_caption(img_path=img_path,caption_path=caption_path):
     for path,i in zip(paths,range(img_number)):
 
         img = cv2.imread(img_path + "/" + path,0)
-        img = cv2.resize(img,(img_length,img_width))
+        # img = cv2.resize(img,(img_length,img_width))
         imgs_id.append({'id':path[:-4],'img':img})
 
 
@@ -40,19 +40,23 @@ def read_img_caption(img_path=img_path,caption_path=caption_path):
     #just image and caption without id but with sorting
     captions = []
     imgs = []
+    ids = []
     for i in range(len(captions_id)):
         id = captions_id[i]['id']
-        captions = captions_id[i]['caption']
+        caption = "<start> " + captions_id[i]['caption'] + " <end>"
         img = cv2.imread(img_path + "/" + str(id) + '.png', 0)
-        img = cv2.resize(img, (img_length, img_width))
+        # img = cv2.resize(img, (img_length, img_width))
+        ids.append(id)
+        captions.append(caption)
         imgs.append(img)
 
 
-    return imgs,captions
+    return imgs,captions,ids
 
 
 def read_img_caption_example(img_path=img_path,caption_path=caption_path):
 
+    #dimentions of images
     img_length, img_width = 500, 500
 
     # reading captions , id + caption
@@ -67,7 +71,7 @@ def read_img_caption_example(img_path=img_path,caption_path=caption_path):
 
     # read image and caption
     id = captions_id[1]['id']
-    caption = captions_id[1]['caption']
+    caption = "<start> " + captions_id[1]['caption'] + " <end>"
     img = cv2.imread(img_path + "/" + str(id) + '.png', 0)
     # img = cv2.imread(img_path + "/" + "old.png",0)
     img = cv2.resize(img, (img_length, img_width))
