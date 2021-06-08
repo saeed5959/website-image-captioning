@@ -25,7 +25,7 @@ def preprocess_captions_vector(captions=captions):
     #convetring text to vector
     captions_seq = tokenizer.texts_to_sequences(captions)
 
-    captions_vector = tf.keras.preprocessing.sequence.pad_sequences(captions_seq,padding='post')
+    captions_vector = tf.keras.preprocessing.sequence.pad_sequences(captions_seq,padding='post').tolist()
 
     return captions_vector,maximum_token
 
@@ -35,3 +35,20 @@ def preprocess_img(imgs=imgs):
     images = tf.keras.applications.inception_v3.preprocess_input(imgs)
 
     return images
+
+def split_data(caption_vector,images):
+
+    slice = int(len(caption_vector)*0.8)
+
+    caption_vector_train = caption_vector[0:slice]
+    caption_vector_val = caption_vector[slice:]
+    images_train = images[0:slice]
+    images_val = images[slice:]
+
+    return caption_vector_train,caption_vector_val,images_train,images_val
+
+def tf_dataset(images,caption_vector):
+
+    dataset = tf.data.Dataset.from_tensor_slices((images,caption_vector))
+
+    return dataset
